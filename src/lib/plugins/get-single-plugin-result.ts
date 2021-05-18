@@ -13,6 +13,7 @@ export async function getSinglePluginResult(
   const inspectRes: pluginApi.InspectResult = await moduleInfo.inspect(
     root,
     targetFile || options.file,
+    null || options.initScript,
     { ...options },
   );
   return inspectRes;
