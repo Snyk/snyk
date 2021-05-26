@@ -39,12 +39,15 @@ commands:
       - run:
           name: Install dependencies
           command: npm install
-  update_local_npmrc_linux:
-    description: Update local .npmrc file (Linux)
+  npm_login:
+    description: npm login
     steps:
-      - run:
-          name: Update local .npmrc file (Linux)
-          command: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> .npmrc
+      # NPM will replace "${NPM_TOKEN}" at runtime with environment variable.
+      - run: npm config set '//registry.npmjs.org/:_authToken' '${NPM_TOKEN}'
+  snyk_login:
+    description: snyk login
+    steps:
+      - run: npx ts-node src/cli config set api="${SNYK_API_KEY}"
   build_ts:
     description: Build js files from ts
     steps:
@@ -169,13 +172,11 @@ jobs:
           command: |
             sudo npm install -g npm@7
       - show_node_version
-      - update_local_npmrc_linux
+      - npm_login
       - install_deps
       - build_ts
       - generate_help
-      - run:
-          name: Run auth
-          command: npm run snyk-auth
+      - snyk_login
       - run:
           name: Run tests
           command: npm run test:common
@@ -227,20 +228,13 @@ jobs:
       - run:
           name: Setup Lerna
           command: npm install -g lerna@3.22.1
-      - run:
-          name: Update local .npmrc file (Windows)
-          command: echo "//registry.npmjs.org/:_authToken=$env:NPM_TOKEN" >> .npmrc
-      - run:
-          name: Install dependencies (Windows)
-          command: npm install --ignore-scripts # ignore-scripts required because of postinstall script in snyk-resolve-deps package
+      - npm_login
+      - install_deps
       - build_ts
       - run:
           name: npm version
           command: npm --version
-      - run:
-          name: Run auth
-          shell: bash.exe
-          command: npm run snyk-auth-windows
+      - snyk_login
       - when:
           condition: << parameters.package_tests >>
           steps:
@@ -279,7 +273,7 @@ jobs:
           steps:
             - run:
                 name: Run Acceptance tests
-                command: npm run test:acceptance-windows
+                command: npm run test:acceptance
       - when:
           condition: << parameters.system_tests >>
           steps:
@@ -304,15 +298,10 @@ jobs:
       - run: sudo npm install -g npm@7
       - show_node_version
       - install_lerna_linux
-      - update_local_npmrc_linux
+      - npm_login
       - install_deps
       - build_ts
-      - run:
-          name: npm version
-          command: npm --version
-      - run:
-          name: Run auth
-          command: npm run snyk-auth
+      - snyk_login
       - when:
           condition: << parameters.package_tests >>
           steps:
@@ -416,7 +405,7 @@ jobs:
             sudo npm install -g npm@7
       - show_node_version
       - install_lerna_linux
-      - update_local_npmrc_linux
+      - npm_login
       - install_deps
       - generate_help
       - run:
