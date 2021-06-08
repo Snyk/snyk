@@ -158,7 +158,7 @@ export interface LegacyVulnApiResult extends BasicResultData {
   vulnerabilities: AnnotatedIssue[];
   dependencyCount: number;
   policy: string;
-  licensesPolicy: object | null;
+  licensesPolicy: TestDepGraphMeta['licensesPolicy'] | null;
   ignoreSettings: IgnoreSettings | null;
   docker?: {
     baseImage?: any;
@@ -250,10 +250,33 @@ interface TestDependenciesResult {
   depGraphData: depGraphLib.DepGraphData;
 }
 
+/**
+ * Source: https://github.com/snyk/registry/blob/87a006d502dedd9668250fcaabee1df639daf212/src/lib/types/index.ts#L293
+ */
+export enum LicenseSeverity {
+  NONE = 'none',
+  LOW = 'low',
+  MEDIUM = 'medium',
+  HIGH = 'high',
+}
+
+/**
+ * Source: https://github.com/snyk/registry/blob/87a006d502dedd9668250fcaabee1df639daf212/src/lib/types/index.ts#L300
+ */
+export interface OrgLicenseRule {
+  [licenseType: string]: {
+    licenseType: string;
+    severity: LicenseSeverity;
+    instructions?: string;
+    orgId?: string;
+  };
+}
+
 export interface TestDepGraphMeta {
   isPublic: boolean;
   isLicensesEnabled: boolean;
   licensesPolicy?: {
+    orgLicenseRules: OrgLicenseRule;
     severities: {
       [type: string]: string;
     };
@@ -471,7 +494,10 @@ function toLegacyPkgId(pkg: Pkg) {
   return `${pkg.name}@${pkg.version || '*'}`;
 }
 
-function getSummary(vulns: object[], severityThreshold?: SEVERITY): string {
+function getSummary(
+  vulns: AnnotatedIssue[],
+  severityThreshold?: SEVERITY,
+): string {
   const count = vulns.length;
   let countText = '' + count;
   const severityFilters: string[] = [];

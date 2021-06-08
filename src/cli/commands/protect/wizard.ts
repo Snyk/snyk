@@ -1,3 +1,44 @@
+import { MultiProjectResult } from '@snyk/cli-interface/legacy/plugin';
+import * as inquirer from '@snyk/inquirer';
+import chalk from 'chalk';
+import { exec } from 'child_process';
+import * as debugModule from 'debug';
+import * as fs from 'fs';
+import * as path from 'path';
+import * as tryRequire from 'snyk-try-require';
+import * as url from 'url';
+import * as snyk from '../../../lib/';
+import * as alerts from '../../../lib/alerts';
+import * as analytics from '../../../lib/analytics';
+import { apiTokenExists } from '../../../lib/api-token';
+import * as authorization from '../../../lib/authorization';
+import * as config from '../../../lib/config';
+import * as detect from '../../../lib/detect';
+import { MisconfiguredAuthInCI } from '../../../lib/errors/misconfigured-auth-in-ci-error';
+import { MissingTargetFileError } from '../../../lib/errors/missing-targetfile-error';
+import { isCI } from '../../../lib/is-ci';
+import { ModuleInfo as moduleInfo } from '../../../lib/module-info';
+import { monitor as snykMonitor } from '../../../lib/monitor';
+import * as pm from '../../../lib/package-managers';
+import * as plugins from '../../../lib/plugins';
+import { LegacyVulnApiResult } from '../../../lib/snyk-test/legacy';
+import * as spinner from '../../../lib/spinner';
+import {
+  MonitorMeta,
+  MonitorResult,
+  Options,
+  PackageJson,
+  ProtectOptions,
+} from '../../../lib/types';
+import * as auth from '../auth/is-authed';
+import * as allPrompts from './prompts';
+import cloneDeep = require('lodash.clonedeep');
+import get = require('lodash.get');
+import getVersion = require('../version');
+import answersToTasks = require('./tasks');
+const protect = require('../../../lib/protect');
+import npm = require('../../../lib/npm');
+
 export = wizard;
 
 // used for testing
@@ -6,48 +47,8 @@ Object.assign(wizard, {
   inquire,
   interactive,
 });
-import * as debugModule from 'debug';
-const debug = debugModule('snyk');
 
-import * as path from 'path';
-import * as inquirer from '@snyk/inquirer';
-import * as fs from 'fs';
-import * as tryRequire from 'snyk-try-require';
-import chalk from 'chalk';
-import * as url from 'url';
-const cloneDeep = require('lodash.clonedeep');
-const get = require('lodash.get');
-import { exec } from 'child_process';
-import { apiTokenExists } from '../../../lib/api-token';
-import * as auth from '../auth/is-authed';
-import getVersion = require('../version');
-import * as allPrompts from './prompts';
-import answersToTasks = require('./tasks');
-import * as snyk from '../../../lib/';
-import { monitor as snykMonitor } from '../../../lib/monitor';
-import { isCI } from '../../../lib/is-ci';
-const protect = require('../../../lib/protect');
-import * as authorization from '../../../lib/authorization';
-import * as config from '../../../lib/config';
-import * as spinner from '../../../lib/spinner';
-import * as analytics from '../../../lib/analytics';
-import * as alerts from '../../../lib/alerts';
-import npm = require('../../../lib/npm');
-import * as detect from '../../../lib/detect';
-import * as plugins from '../../../lib/plugins';
-import { ModuleInfo as moduleInfo } from '../../../lib/module-info';
-import { MisconfiguredAuthInCI } from '../../../lib/errors/misconfigured-auth-in-ci-error';
-import { MissingTargetFileError } from '../../../lib/errors/missing-targetfile-error';
-import * as pm from '../../../lib/package-managers';
-import {
-  Options,
-  MonitorMeta,
-  MonitorResult,
-  PackageJson,
-  ProtectOptions,
-} from '../../../lib/types';
-import { LegacyVulnApiResult } from '../../../lib/snyk-test/legacy';
-import { MultiProjectResult } from '@snyk/cli-interface/legacy/plugin';
+const debug = debugModule('snyk');
 
 function wizard(options?: Options) {
   options = options || ({} as Options);
@@ -216,6 +217,8 @@ async function processWizardFlow(options) {
     });
 }
 
+type Answers = Record<string, unknown>;
+
 function interactive(test, pkg, policy, options) {
   const vulns = test.vulnerabilities;
   if (!policy) {
@@ -227,7 +230,7 @@ function interactive(test, pkg, policy, options) {
     pkg = {};
   }
 
-  return new Promise((resolve) => {
+  return new Promise<Answers>((resolve) => {
     debug('starting questions');
     const prompts = allPrompts.getUpdatePrompts(vulns, policy, options);
     resolve(inquire(prompts, {}));
@@ -252,7 +255,7 @@ function interactive(test, pkg, policy, options) {
     });
 }
 
-function inquire(prompts, answers): Promise<{}> {
+function inquire(prompts, answers: Answers): Promise<Answers> {
   if (prompts.length === 0) {
     return Promise.resolve(answers);
   }

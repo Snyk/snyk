@@ -12,7 +12,7 @@ const spy = sandbox.spy();
 
 sandbox.stub(inquirer, 'prompt').callsFake((qs, cb) => {
   if (!cb) {
-    cb = Promise.resolve.bind(Promise);
+    cb = () => Promise.resolve();
   }
   qs.forEach((q) => {
     if (q.name.indexOf('.') > -1) {

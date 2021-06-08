@@ -32,8 +32,8 @@ const wizard = proxyquire('../src/cli/commands/protect/wizard', {
       },
     },
     '../../../lib/protect': {
-      install: () => new Promise((resolve) => resolve()),
-      installDev: () => new Promise((resolve) => resolve()),
+      install: () => new Promise<void>((resolve) => resolve()),
+      installDev: () => new Promise<void>((resolve) => resolve()),
     },
   },
 });
@@ -64,7 +64,7 @@ tap.beforeEach((done) => {
     .create()
     .then((p) => {
       mockPolicy = p;
-      mockPolicy.save = save.bind(null, mockPolicy);
+      mockPolicy.save = () => save(mockPolicy);
     })
     .then(done);
 });

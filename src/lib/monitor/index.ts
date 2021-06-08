@@ -1,6 +1,5 @@
 import * as Debug from 'debug';
 import * as path from 'path';
-
 import * as depGraphLib from '@snyk/dep-graph';
 import * as snyk from '..';
 import { apiOrOAuthTokenExists, getAuthHeader } from '../api-token';
@@ -53,6 +52,7 @@ import {
 import { countPathsToGraphRoot } from '../utils';
 import * as alerts from '../alerts';
 import { abridgeErrorMessage } from '../error-format';
+import { ContainerTarget, GitTarget } from '../ecosystems/types';
 
 const debug = Debug('snyk');
 
@@ -65,7 +65,7 @@ interface MonitorBody {
   policy: string;
   package?: DepTree;
   callGraph?: CallGraph;
-  target: {};
+  target: GitTarget | ContainerTarget | null;
   targetFileRelativePath: string;
   targetFile: string;
   contributors?: Contributor[];

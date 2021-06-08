@@ -36,7 +36,7 @@ tap.beforeEach((done) => {
     .create()
     .then((p) => {
       mockPolicy = p;
-      mockPolicy.save = save.bind(null, mockPolicy);
+      mockPolicy.save = () => save(mockPolicy);
     })
     .then(done);
 });

@@ -33,7 +33,7 @@ test(
         // exact match
         var total = res.vulnerabilities.length;
         var vulns;
-        var runFilter = runFilterShared.bind(null, res);
+        var runFilter = () => runFilterShared(res);
 
         vulns = runFilter('*');
         t.equal(vulns.length, total - 1, 'removed with * _only_ rule');
@@ -52,7 +52,7 @@ test('protect correctly filters', function(t) {
       // exact match
       var total = res.vulnerabilities.length;
       var vulns;
-      var runFilter = runFilterShared.bind(null, res);
+      var runFilter = () => runFilterShared(res);
 
       vulns = runFilter('sqlite3@2.2.7 > node-pre-gyp@0.5.22 > semver@3.0.1');
       t.equal(vulns.length, total - 1, 'removed matched vuln');

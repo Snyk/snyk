@@ -1,21 +1,24 @@
-import * as wrap from 'wrap-ansi';
 import chalk from 'chalk';
-
+import * as wrap from 'wrap-ansi';
 import {
   AnnotatedIssue,
   CallPath,
   REACHABILITY,
 } from '../../../../lib/snyk-test/legacy';
-import { SampleReachablePaths } from './types';
 import {
   CALL_PATH_LEADING_ELEMENTS,
-  PATH_SEPARATOR,
   CALL_PATH_TRAILING_ELEMENTS,
   PATH_HIDDEN_ELEMENTS,
+  PATH_SEPARATOR,
 } from '../../constants';
+import { SampleReachablePaths } from './types';
 
 const reachabilityLevels: {
-  [key in REACHABILITY]: { color: Function; text: string; json: string };
+  [key in REACHABILITY]: {
+    color: (s: string) => string;
+    text: string;
+    json: string;
+  };
 } = {
   [REACHABILITY.FUNCTION]: {
     color: chalk.redBright,

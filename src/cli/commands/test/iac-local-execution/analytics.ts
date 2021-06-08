@@ -1,9 +1,10 @@
 import { FormattedResult } from './types';
 import * as analytics from '../../../../lib/analytics';
+import { SEVERITY } from '../../../../lib/snyk-test/common';
 
-export function addIacAnalytics(formattedResults: FormattedResult[]) {
+export function addIacAnalytics(formattedResults: FormattedResult[]): void {
   let totalIssuesCount = 0;
-  const issuesByType: Record<string, object> = {};
+  const issuesByType: Record<string, Record<SEVERITY, number>> = {};
   const packageManagers = Array<string>();
 
   formattedResults.forEach((res) => {

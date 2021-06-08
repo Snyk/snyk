@@ -1,13 +1,12 @@
 import * as abbrev from 'abbrev';
-import { MethodResult } from './commands/types';
-
-import debugModule = require('debug');
-import { parseMode, displayModeHelp } from './modes';
+import { getContainerImageSavePath } from '../lib/container';
 import {
   SupportedCliCommands,
   SupportedUserReachableFacingCliArgs,
 } from '../lib/types';
-import { getContainerImageSavePath } from '../lib/container';
+import { MethodResult } from './commands/types';
+import { displayModeHelp, parseMode } from './modes';
+import debugModule = require('debug');
 
 export declare interface Global extends NodeJS.Global {
   ignoreUnknownCA: boolean;

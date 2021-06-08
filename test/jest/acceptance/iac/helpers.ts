@@ -33,7 +33,7 @@ export async function startMockServer() {
   return {
     run: async (cmd: string, overrides?: Record<string, string>) =>
       run(cmd, { ...env, ...overrides }),
-    teardown: async () => new Promise((resolve) => server.close(resolve)),
+    teardown: async () => new Promise<void>((resolve) => server.close(resolve)),
   };
 }
 

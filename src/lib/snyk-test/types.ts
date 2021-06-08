@@ -1,4 +1,5 @@
 import * as depGraphLib from '@snyk/dep-graph';
+import { ParsedUrlQueryInput } from 'querystring';
 import { ScanResult } from '../ecosystems/types';
 import { GitTarget, ContainerTarget } from '../project-metadata/types';
 import { DepTree } from '../types';
@@ -37,6 +38,6 @@ export interface Payload {
     authorization: string;
   };
   body?: PayloadBody | IacScan | TestDependenciesRequest;
-  qs?: object | null;
+  qs?: ParsedUrlQueryInput | null;
   modules?: DepTreeFromResolveDeps;
 }

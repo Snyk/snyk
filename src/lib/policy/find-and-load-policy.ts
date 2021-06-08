@@ -1,13 +1,20 @@
-import * as snykPolicyLib from 'snyk-policy';
 import * as debugModule from 'debug';
+import * as snykPolicyLib from 'snyk-policy';
 import { PackageExpanded } from 'snyk-resolve-deps';
-
 import { pluckPolicies } from '.';
+import * as analytics from '../analytics';
 import { SupportedPackageManagers } from '../package-managers';
 import { PackageJson, PolicyOptions } from '../types';
-import * as analytics from '../analytics';
 
 const debug = debugModule('snyk');
+
+/**
+ * This is an external type that is not clearly defined. Check:
+ * https://github.com/snyk/policy
+ */
+export type Policy = {
+  toString: () => string;
+};
 
 export async function findAndLoadPolicy(
   root: string,
@@ -15,7 +22,7 @@ export async function findAndLoadPolicy(
   options: PolicyOptions,
   pkg?: PackageExpanded,
   scannedProjectFolder?: string,
-): Promise<string | undefined> {
+): Promise<Policy | void> {
   const isDocker = scanType === 'docker';
   const isNodeProject = ['npm', 'yarn'].includes(scanType);
   // monitor
