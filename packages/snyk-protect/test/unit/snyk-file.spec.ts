@@ -1,6 +1,6 @@
 import { extractPatchMetadata } from '../../src/lib/snyk-file';
 
-describe(extractPatchMetadata.name, () => {
+describe('extractPatchMetadata', () => {
   it('extracts a direct dependency', () => {
     const dotSnykFileContents = `
 # Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
