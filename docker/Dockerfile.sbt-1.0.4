@@ -22,7 +22,7 @@ RUN apt-get update && \
     echo "addCommandAlias(\"dependency-tree\", \"dependencyTree\")" >> /root/.sbt/1.0/user.sbt && \
     echo "addCommandAlias(\"dependency-tree\", \"dependencyTree\")" >> /home/node/.sbt/1.0/user.sbt && \
     curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
-    apt-get install -y nodejs jq && \
+    apt-get install -y nodejs && \
     npm install --global snyk snyk-to-html && \
     apt-get autoremove -y && \
     apt-get clean && \
