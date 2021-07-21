@@ -4,8 +4,8 @@ import { executeCommand } from './exec';
 
 export async function getVersion(): Promise<string> {
   const root = path.resolve(__dirname, '../..');
-  const filename = path.resolve(root, 'package.json');
-  const version = require(filename).version;
+
+  const { version } = require('../../package.json');
 
   if (version && version !== '0.0.0') {
     return version;

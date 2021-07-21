@@ -44,15 +44,15 @@ describe('test --json-file-output ', () => {
     delete process.env.SNYK_PORT;
 
     await server.close();
-    let key = 'set';
-    let value = 'api=' + oldkey;
-    if (!oldkey) {
-      key = 'unset';
-      value = 'api';
+
+    if (oldkey) {
+      await cli.config('set', 'api=' + oldkey);
+    } else {
+      await cli.config('unset', 'api');
     }
-    await cli.config(key, value);
+
     if (oldendpoint) {
-      await cli.config('endpoint', oldendpoint);
+      await cli.config('set', 'endpoint=' + oldendpoint);
     }
   });
   it(

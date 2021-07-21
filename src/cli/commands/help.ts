@@ -2,6 +2,10 @@ import * as fs from 'fs';
 import * as path from 'path';
 import stripAnsi from 'strip-ansi';
 
+// Use only in webpack build
+if (typeof (require as any).context === 'function') {
+  (require as any).context('../../../help/commands-txt', true, /\.txt$/);
+}
 const DEFAULT_HELP = 'snyk';
 
 function readHelpFile(filename: string): string {
@@ -24,16 +28,12 @@ export = async function help(item: string | boolean) {
   try {
     const filename = path.resolve(
       __dirname,
-      '../../../help/commands-txt',
+      './help/',
       item === DEFAULT_HELP ? DEFAULT_HELP + '.txt' : `snyk-${item}.txt`,
     );
     return readHelpFile(filename);
   } catch (error) {
-    const filename = path.resolve(
-      __dirname,
-      '../../../help/commands-txt',
-      DEFAULT_HELP + '.txt',
-    );
+    const filename = path.resolve(__dirname, './help/', DEFAULT_HELP + '.txt');
     return readHelpFile(filename);
   }
 };

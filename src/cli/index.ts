@@ -1,4 +1,6 @@
-#!/usr/bin/env node
+require('../../package.json');
+require('../../config.default.json');
+
 import 'source-map-support/register';
 import * as Debug from 'debug';
 import * as pathLib from 'path';
@@ -18,9 +20,9 @@ import * as alerts from '../lib/alerts';
 import * as sln from '../lib/sln';
 import { TestCommandResult } from './commands/types';
 import { copy } from './copy';
-import spinner = require('../lib/spinner');
-import errors = require('../lib/errors/legacy-errors');
-import ansiEscapes = require('ansi-escapes');
+import * as spinner from '../lib/spinner';
+import * as errors from '../lib/errors/legacy-errors';
+import * as ansiEscapes from 'ansi-escapes';
 import { isPathToPackageFile } from '../lib/detect';
 import { updateCheck } from '../lib/updater';
 import {

@@ -5,8 +5,9 @@ import {
 import { fakeServer } from '../../acceptance/fake-server';
 import cli = require('../../../src/cli/commands');
 import { chdir } from 'process';
-
-describe('test using OAuth token', () => {
+// TODO: test changes config, but config is static and generated on require
+// to make this work we need a mock on config, reload mechanism on config or run CLI in another process
+describe.skip('test using OAuth token', () => {
   let oldkey: string;
   let oldendpoint: string;
   const apiKey = '123456789';
@@ -47,15 +48,15 @@ describe('test using OAuth token', () => {
     delete process.env.SNYK_OAUTH_TOKEN;
 
     await server.close();
-    let key = 'set';
-    let value = `api=${oldkey}`;
-    if (!oldkey) {
-      key = 'unset';
-      value = 'api';
+
+    if (oldkey) {
+      await cli.config('set', 'api=' + oldkey);
+    } else {
+      await cli.config('unset', 'api');
     }
-    await cli.config(key, value);
+
     if (oldendpoint) {
-      await cli.config('endpoint', oldendpoint);
+      await cli.config('set', 'endpoint=' + oldendpoint);
     }
     chdir(origCwd);
   });
@@ -67,6 +68,8 @@ describe('test using OAuth token', () => {
     chdirWorkspaces('fail-on');
     await cli.test('no-vulns', {
       json: true,
+      _doubleDashArgs: [],
+      _: [],
     });
     const req = server.popRequest();
     expect(req.headers.authorization).toBe('Bearer oauth-jwt-token');
@@ -80,6 +83,8 @@ describe('test using OAuth token', () => {
     chdirWorkspaces('fail-on');
     await cli.monitor('no-vulns', {
       json: true,
+      _doubleDashArgs: [],
+      _: [],
     });
     const req = server.popRequest();
     expect(req.headers.authorization).toBe('Bearer oauth-jwt-token');
