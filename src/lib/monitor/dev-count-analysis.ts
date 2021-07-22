@@ -10,9 +10,11 @@ import * as crypto from 'crypto';
 import { exec } from 'child_process';
 import { Contributor } from '../types';
 
+// eslint-disable-next-line import/no-unused-modules
 export const SERIOUS_DELIMITER = '_SNYK_SEPARATOR_';
-export const CONTRIBUTING_DEVELOPER_PERIOD_DAYS = 90;
+const CONTRIBUTING_DEVELOPER_PERIOD_DAYS = 90;
 // Limit the number of commits returned from `git log` command to stay within maxBuffer limit
+// eslint-disable-next-line import/no-unused-modules
 export const MAX_COMMITS_IN_GIT_LOG = 500;
 
 export async function getContributors(
@@ -36,6 +38,7 @@ export async function getContributors(
   return stats.getRepoContributors();
 }
 
+// eslint-disable-next-line import/no-unused-modules
 export class GitCommitInfo {
   authorHashedEmail: string;
   commitTimestamp: string; // use ISO 8601 format
@@ -50,6 +53,7 @@ export class GitCommitInfo {
   }
 }
 
+// eslint-disable-next-line import/no-unused-modules
 export class GitRepoCommitStats {
   commitInfos: GitCommitInfo[];
 
@@ -111,6 +115,7 @@ export class GitRepoCommitStats {
   }
 }
 
+// eslint-disable-next-line import/no-unused-modules
 export function parseGitLogLine(logLine: string): GitCommitInfo {
   const lineComponents = logLine.split(SERIOUS_DELIMITER);
   const authorEmail = lineComponents[2];
@@ -120,6 +125,7 @@ export function parseGitLogLine(logLine: string): GitCommitInfo {
   return commitInfo;
 }
 
+// eslint-disable-next-line import/no-unused-modules
 export function parseGitLog(gitLog: string): GitRepoCommitStats {
   if (gitLog.trim() === '') {
     return GitRepoCommitStats.empty();
@@ -130,6 +136,7 @@ export function parseGitLog(gitLog: string): GitRepoCommitStats {
   return stats;
 }
 
+// eslint-disable-next-line import/no-unused-modules
 export function hashData(s: string): string {
   const hashedData = crypto
     .createHash('sha1')
@@ -138,6 +145,7 @@ export function hashData(s: string): string {
   return hashedData;
 }
 
+// eslint-disable-next-line import/no-unused-modules
 export function isSha1Hash(data: string): boolean {
   // sha1 hash must be exactly 40 characters of 0-9 / a-f (i.e. lowercase hex characters)
   // ^ == start anchor
@@ -152,6 +160,7 @@ export function isSha1Hash(data: string): boolean {
 /**
  * @returns time stamp in seconds-since-epoch of 90 days ago since 90 days is the "contributing devs" timeframe
  */
+// eslint-disable-next-line import/no-unused-modules
 export function getTimestampStartOfContributingDevTimeframe(
   dNow: Date,
   timespanInDays: number = CONTRIBUTING_DEVELOPER_PERIOD_DAYS,
@@ -164,6 +173,7 @@ export function getTimestampStartOfContributingDevTimeframe(
   return startOfPeriodEpochSeconds;
 }
 
+// eslint-disable-next-line import/no-unused-modules
 export async function runGitLog(
   timestampEpochSecondsStartOfPeriod: number,
   timestampEpochSecondsEndOfPeriod: number,
@@ -179,6 +189,7 @@ export async function runGitLog(
   }
 }
 
+// eslint-disable-next-line import/no-unused-modules
 export function separateLines(inputText: string): string[] {
   const linuxStyleNewLine = '\n';
   const windowsStyleNewLine = '\r\n';
@@ -187,6 +198,7 @@ export function separateLines(inputText: string): string[] {
   return lines;
 }
 
+// eslint-disable-next-line import/no-unused-modules
 export function execShell(
   cmd: string,
   workingDirectory: string,
@@ -215,6 +227,7 @@ export function execShell(
   });
 }
 
+// eslint-disable-next-line import/no-unused-modules
 export class ShellOutError extends Error {
   public innerError: Error | undefined;
   public exitCode: number | undefined;

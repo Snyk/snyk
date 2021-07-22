@@ -15,6 +15,7 @@ import {
 } from '../get-multi-plugin-result';
 import { getFileContents } from '../../get-file-contents';
 
+// eslint-disable-next-line import/no-unused-modules
 export async function processYarnWorkspaces(
   root: string,
   settings: {
@@ -139,7 +140,7 @@ interface YarnWorkspacesMap {
   };
 }
 
-export function getWorkspacesMap(file: {
+function getWorkspacesMap(file: {
   content: string;
   fileName: string;
 }): YarnWorkspacesMap {

@@ -31,6 +31,7 @@ const simpleGradleGraph = depGraphLib.createFromJSON({
   },
 });
 
+// eslint-disable-next-line import/no-unused-modules
 export const AllProjectsTests: AcceptanceTests = {
   language: 'Mixed',
   tests: {

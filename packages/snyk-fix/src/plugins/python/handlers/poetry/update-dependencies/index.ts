@@ -87,7 +87,7 @@ export async function updateDependencies(
   return handlerResult;
 }
 
-export function generateSuccessfulChanges(
+function generateSuccessfulChanges(
   pins: DependencyPins,
 ): FixChangesSummary[] {
   const changes: FixChangesSummary[] = [];

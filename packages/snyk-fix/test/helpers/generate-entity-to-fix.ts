@@ -76,7 +76,7 @@ function generateWorkspace(contents: string, path?: string) {
     },
   };
 }
-export function generateScanResult(
+function generateScanResult(
   type: string,
   targetFile: string,
 ): ScanResult {

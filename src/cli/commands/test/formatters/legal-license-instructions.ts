@@ -2,6 +2,7 @@ import { LegalInstruction } from '../../../../lib/snyk-test/legacy';
 import * as wrap from 'wrap-ansi';
 import chalk from 'chalk';
 
+// eslint-disable-next-line import/no-unused-modules
 export function formatLegalInstructions(
   legalInstructions: LegalInstruction[],
   paddingLength = 4,

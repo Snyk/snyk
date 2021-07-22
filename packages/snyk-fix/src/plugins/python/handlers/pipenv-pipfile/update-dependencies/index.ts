@@ -16,6 +16,7 @@ import { validateRequiredData } from '../../validate-required-data';
 
 const debug = debugLib('snyk-fix:python:Pipfile');
 
+// eslint-disable-next-line import/no-unused-modules
 export async function updateDependencies(
   entity: EntityToFix,
   options: FixOptions,

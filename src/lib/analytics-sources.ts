@@ -15,9 +15,13 @@ import { ArgsOptions } from '../cli/args';
 import { join } from 'path';
 const { exec } = require('child_process');
 
+// eslint-disable-next-line import/no-unused-modules
 export const INTEGRATION_NAME_ENVVAR = 'SNYK_INTEGRATION_NAME';
+// eslint-disable-next-line import/no-unused-modules
 export const INTEGRATION_VERSION_ENVVAR = 'SNYK_INTEGRATION_VERSION';
+// eslint-disable-next-line import/no-unused-modules
 export const INTEGRATION_ENVIRONMENT_ENVVAR = 'SNYK_INTEGRATION_ENVIRONMENT';
+// eslint-disable-next-line import/no-unused-modules
 export const INTEGRATION_ENVIRONMENT_VERSION_ENVVAR =
   'SNYK_INTEGRATION_ENVIRONMENT_VERSION';
 
@@ -81,16 +85,19 @@ export const getIntegrationVersion = (args: ArgsOptions[]): string =>
   process.env[INTEGRATION_VERSION_ENVVAR] ||
   '';
 
+// eslint-disable-next-line import/no-unused-modules
 export const getIntegrationEnvironment = (args: ArgsOptions[]): string =>
   (args[0]?.integrationEnvironment as string) ||
   process.env[INTEGRATION_ENVIRONMENT_ENVVAR] ||
   '';
 
+// eslint-disable-next-line import/no-unused-modules
 export const getIntegrationEnvironmentVersion = (args: ArgsOptions[]): string =>
   (args[0]?.integrationEnvironmentVersion as string) ||
   process.env[INTEGRATION_ENVIRONMENT_VERSION_ENVVAR] ||
   '';
 
+// eslint-disable-next-line import/no-unused-modules
 export function isScoop(): boolean {
   const currentProcessPath = process.execPath;
   const looksLikeScoop =
@@ -104,6 +111,7 @@ export function isScoop(): boolean {
   }
 }
 
+// eslint-disable-next-line import/no-unused-modules
 export function validateScoopManifestFile(snykExecutablePath: string): boolean {
   // If this really is installed with scoop, there should be a `manifest.json` file adjacent to the running CLI executable (`snyk-win.exe`) which
   // we can look at for further validation that this really is from scoop.
@@ -131,6 +139,7 @@ export function validateScoopManifestFile(snykExecutablePath: string): boolean {
   return false;
 }
 
+// eslint-disable-next-line import/no-unused-modules
 export function isHomebrew(): boolean {
   const currentProcessPath = process.execPath;
   const isHomebrewPath = currentProcessPath.includes('/Cellar/snyk/');
@@ -141,6 +150,7 @@ export function isHomebrew(): boolean {
   }
 }
 
+// eslint-disable-next-line import/no-unused-modules
 export function validateHomebrew(snykExecutablePath: string): boolean {
   try {
     const expectedFormulaFilePath = join(
@@ -166,6 +176,7 @@ function runCommand(cmd: string): Promise<string> {
   });
 }
 
+// eslint-disable-next-line import/no-unused-modules
 export async function isInstalled(commandToCheck: string): Promise<boolean> {
   let whichCommand = 'which';
   const os = process.platform;
@@ -184,6 +195,7 @@ export async function isInstalled(commandToCheck: string): Promise<boolean> {
 }
 
 // This only works for programs that output a valid version when called with --version flag!
+// eslint-disable-next-line import/no-unused-modules
 export async function getCommandVersion(
   commandToCheck: string,
 ): Promise<string | undefined> {
