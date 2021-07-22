@@ -74,6 +74,7 @@ import { Issue } from '../ecosystems/types';
 import { assembleEcosystemPayloads } from './assemble-payloads';
 import request = require('../request');
 import spinner = require('../spinner');
+import { facts as containerFacts } from 'snyk-docker-plugin';
 
 const debug = debugModule('snyk:run-test');
 
@@ -105,11 +106,16 @@ function prepareEcosystemResponseForParsing(
     depGraphData !== undefined
       ? depGraphLib.createFromJSON(depGraphData)
       : undefined;
-  const imageUserInstructions = payloadBody?.facts.find(
-    (fact) =>
-      fact.type === 'dockerfileAnalysis' ||
-      fact.type === 'autoDetectedUserInstructions',
-  );
+  const imageUserInstructions:
+    | containerFacts.DockerfileAnalysisFact
+    | containerFacts.AutoDetectedUserInstructionsFact
+    | undefined =
+    (payloadBody?.facts.find(
+      (fact) => fact.type === 'dockerfileAnalysis',
+    ) as containerFacts.DockerfileAnalysisFact) ??
+    (payloadBody?.facts.find(
+      (fact) => fact.type === 'autoDetectedUserInstructions',
+    ) as containerFacts.AutoDetectedUserInstructionsFact);
 
   const dockerfilePackages = imageUserInstructions?.data?.dockerfilePackages;
   const projectName = payloadBody?.name || depGraph?.rootPkg.name;
