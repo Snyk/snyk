@@ -1,0 +1,26 @@
+[1mN[0m[1mA[0m[1mM[0m[1mE[0m
+       [1mp[0m[1mr[0m[1mo[0m[1mt[0m[1me[0m[1mc[0m[1mt[0m - Patch vulnerable code in your project's dependencies.
+
+[1mU[0m[1mS[0m[1mA[0m[1mG[0m[1mE[0m
+       You  don't typically need to add the @snyk/protect dependency manually.
+       It'll be introduced when it's needed as part of Snyk's Fix PR  service:
+       https://support.snyk.io/hc/en-us/articles/360011484018-Fixing-vulnera-
+       bilities).
+
+       To enable patches in your Fix PRs:
+
+       O   Visit https://app.snyk.io
+
+       O   Go to "Org Settings" > "Integrations"
+
+       O   Choose "Edit Settings" under your SCM integration.
+
+       O   Under the "Fix Pull Request" section, ensure patches  are  enabled.
+           Snyk  will  now  include  patches  as  part of its Fix PRs for your
+           project.
+
+
+
+[1mF[0m[1mO[0m[1mR[0m [1mM[0m[1mO[0m[1mR[0m[1mE[0m [1mI[0m[1mN[0m[1mF[0m[1mO[0m[1mR[0m[1mM[0m[1mA[0m[1mT[0m[1mI[0m[1mO[0m[1mN[0m
+       Visit the Snyk Protect GitHub repository:
+       https://github.com/snyk/snyk/tree/master/packages/snyk-protect.

@@ -1,4 +1,5 @@
 import protect from '../../src/lib';
+import { getVersion, help } from '../../src/lib';
 import { createProject } from '../util/createProject';
 import { getPatchedLodash } from '../util/getPatchedLodash';
 import * as http from '../../src/lib/http';
@@ -236,6 +237,30 @@ describe('@snyk/protect', () => {
           console.log(delete process.env.SNYK_DISABLE_ANALYTICS);
         }
       });
+    });
+  });
+
+  describe('outputs correct help documentation', () => {
+    it('when called with --help', async () => {
+      const log = jest.spyOn(global.console, 'log');
+      const helpOutput = help();
+
+      process.argv[3] = '--help';
+      await protect(__dirname);
+
+      expect(log).toHaveBeenCalledWith(helpOutput);
+    });
+  });
+
+  describe('outputs correct version', () => {
+    it('when called with --version', async () => {
+      const log = jest.spyOn(global.console, 'log');
+      const version = getVersion();
+
+      process.argv[3] = '--version';
+      await protect(__dirname);
+
+      expect(log).toHaveBeenCalledWith(version);
     });
   });
 });

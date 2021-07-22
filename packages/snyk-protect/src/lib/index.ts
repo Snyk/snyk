@@ -13,6 +13,13 @@ import { getAllPatches } from './fetch-patches';
 import { sendAnalytics } from './analytics';
 
 async function protect(projectFolderPath: string) {
+  // Handle runs with flags. Fourth arg would be a flag, if used.
+  const rawArgs = process.argv.slice(3);
+  if (rawArgs.length > 0) {
+    runProtectWithFlag(rawArgs);
+    return;
+  }
+
   const snykFilePath = path.resolve(projectFolderPath, '.snyk');
 
   if (!fs.existsSync(snykFilePath)) {
@@ -92,4 +99,37 @@ async function protect(projectFolderPath: string) {
   });
 }
 
+// Either run with --version or --help
+function runProtectWithFlag(args: string[]) {
+  const flag = args[0];
+  if (args.length > 1 || (flag !== '--version' && flag !== '--help')) {
+    console.log('Unsupported flag or flags used.');
+    return;
+  }
+
+  if (flag === '--version') {
+    console.log(getVersion());
+  }
+
+  if (flag === '--help') {
+    console.log(help());
+  }
+}
+
 export default protect;
+
+const FILENAME = 'packages/snyk-protect/src/lib/help/help.txt';
+
+export function help(): string {
+  const file = fs.readFileSync(FILENAME, 'utf8');
+  return file;
+}
+
+export function getVersion() {
+  const rawData = fs.readFileSync(
+    'packages/snyk-protect/package.json',
+    'utf-8',
+  );
+  const packageJson = JSON.parse(rawData);
+  return packageJson.version;
+}
