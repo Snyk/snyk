@@ -16,7 +16,7 @@
     "test": "test"
   },
   "bin": {
-    "snyk-protect": "dist/index.js"
+    "snyk-protect": "bin/snyk-protect"
   },
   "engines": {
     "node": ">=10"
